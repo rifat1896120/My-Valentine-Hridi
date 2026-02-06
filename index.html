@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💖</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#ff758f,#ff4d6d,#c9184a,#590d22);
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+    overflow:hidden;
+    transition: background 1s;
+}
+
+/* HEARTBEAT */
+body.beat{
+    animation:beat 1.2s infinite;
+}
+@keyframes beat{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.015)}
+}
+
+/* CARD */
+.card{
+    text-align:center;
+    max-width:340px;
+    padding:30px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 40px rgba(255,77,109,.35);
+}
+
+/* INPUT */
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin-top:15px;
+    font-size:16px;
+}
+
+/* BUTTON */
+button{
+    margin-top:18px;
+    padding:12px 28px;
+    border:none;
+    border-radius:25px;
+    background:#ff4d6d;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    position:relative;
+    transition: all 0.3s;
+}
+
+/* STORY TEXT */
+.story{
+    display:none;
+    font-size:1.8rem;
+    text-align:center;
+    opacity:0;
+    transition:opacity 1.5s;
+}
+
+/* FIREWORK DOTS */
+.spark{
+    position:fixed;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#ff4d6d;
+    animation:fly 1.8s forwards;
+}
+@keyframes fly{
+    to{
+        transform:translate(var(--x),var(--y));
+        opacity:0;
+    }
+}
+
+/* YES/NO BUTTONS */
+#choices{
+    display:none;
+    margin-top:30px;
+    text-align:center;
+}
+#choices button{
+    margin:0 12px;
+}
+
+/* VALENTINE MESSAGE */
+#valentine{
+    display:none;
+    font-size:1.8rem;
+    margin-top:25px;
+    opacity:0;
+    transition:opacity 1.5s;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <h2>Before we begin…</h2>
+    <p>Tell me your name 💭</p>
+    <input id="name">
+    <button onclick="start()">Continue</button>
+</div>
+
+<div class="story" id="story"></div>
+
+<div id="choices">
+    <button id="yes">Yes 💖</button>
+    <button id="no">No 🙃</button>
+</div>
+
+<div id="valentine">🌹 You just made this Valentine unforgettable.  
+Thank you for choosing love 💕</div>
+
+<!-- Romantic soft piano song -->
+<audio id="music">
+  <source src="https://cdn.pixabay.com/audio/2021/12/14/audio_6b50b9e0c2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const story = document.getElementById("story");
+const card = document.getElementById("card");
+const music = document.getElementById("music");
+const choices = document.getElementById("choices");
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const valentine = document.getElementById("valentine");
+
+function show(text, delay=0){
+    setTimeout(()=>{
+        story.innerHTML=text;
+        story.style.display="block";
+        story.style.opacity=1;
+    },delay);
+}
+
+function start(){
+    const name = document.getElementById("name").value || "You";
+    card.style.display="none";
+    music.play();
+
+    show(`Hey ${name}…`,500);
+
+    setTimeout(()=>{
+        document.body.classList.add("beat");
+        story.style.opacity=0;
+    },2500);
+
+    show("I didn’t plan this…",4000);
+
+    setTimeout(()=>story.style.opacity=0,6500);
+
+    show("But my heart did 💓",8000);
+
+    setTimeout(()=>{
+        story.style.opacity=0;
+        explode();
+    },10500);
+
+    setTimeout(()=>{
+        show(`${name}, will you be my Valentine? 💖`,11500);
+    },0);
+
+    setTimeout(()=>choices.style.display="block",12500);
+}
+
+function explode(){
+    for(let i=0;i<40;i++){
+        const s=document.createElement("div");
+        s.className="spark";
+        s.style.left="50%";
+        s.style.top="50%";
+        s.style.setProperty("--x",(Math.random()*600-300)+"px");
+        s.style.setProperty("--y",(Math.random()*600-300)+"px");
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(),1800);
+    }
+}
+
+// YES CLICK
+yesBtn.onclick = ()=>{
+    valentine.style.display="block";
+    setTimeout(()=>valentine.style.opacity=1,100);
+}
+
+// NO FLEE
+noBtn.addEventListener("mouseover", ()=>{
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+});
+</script>
+
+</body>
+</html>
